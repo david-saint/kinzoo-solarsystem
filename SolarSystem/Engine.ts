@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { Asset } from 'expo-asset';
 import { Platform } from 'react-native';
-import Animated from 'react-native-reanimated';
 
 import Scene from './Scene';
 import CONSTANTS from './Constants';
@@ -10,15 +9,17 @@ export default class Engine {
   public scene?: Scene;
   private _width: number;
   private _height: number;
+  public isDragging: boolean = false;
   private _assets: Record<string, Asset>;
-  public X: Animated.Value | null = null;
-  public Y: Animated.Value | null = null;
   public camera?: THREE.PerspectiveCamera;
   public earth: THREE.Group = new THREE.Group();
   public tapPoint: THREE.Vector2 = new THREE.Vector2();
   public raycaster: THREE.Raycaster = new THREE.Raycaster();
-  private rotateVelocity: {x: number; y: number} = { x: 0.0025, y: 0.005 };
   private originalCameraPosition: THREE.Vector3 = new THREE.Vector3();
+  private rotateVelocity: {x: number; y: number} = {
+    x: CONSTANTS.rVelocityX,
+    y: CONSTANTS.rVelocityY,
+  };
 
   constructor(width: number, height: number, public renderer: THREE.Renderer) {
     this._width = width;
@@ -27,7 +28,7 @@ export default class Engine {
 
   createCamera = (width: number, height: number): THREE.PerspectiveCamera => {
     const camera = new THREE.PerspectiveCamera(CONSTANTS.cameraFOV, width / height, 1, 100000);
-    camera.position.set(200, 500, 500);
+    camera.position.set(200, 200, 1000);
     camera.lookAt(new THREE.Vector3());
     this.originalCameraPosition = camera.position.clone();
 
@@ -80,11 +81,6 @@ export default class Engine {
 
     this.earth.rotation.y += this.rotateVelocity.y;
     this.earth.rotation.x += this.rotateVelocity.x;
-
-    if (this.X && this.Y) {
-      this.earth.position.x = this.X.__getValue();
-      this.earth.position.y = this.Y.__getValue();
-    }
   }
 
   isEarthFocussed({x, y}) {
@@ -97,9 +93,25 @@ export default class Engine {
     return intersects.length > 0;
   }
 
-  setCoords(x, y) {
-    this.X = x;
-    this.Y = y;
+  dragEarthTo({moveX, moveY}) {
+    var vec = new THREE.Vector3(); // create once and reuse
+    var pos = new THREE.Vector3(); // create once and reuse
+
+    vec.set(
+        ( moveX / window.innerWidth ) * 2 - 1,
+        - ( moveY / window.innerHeight ) * 2 + 1,
+        0.5 );
+
+    vec.unproject( this.camera );
+
+    vec.sub( this.camera.position ).normalize();
+
+    var distance = - this.camera.position.z / vec.z;
+
+    pos.copy( this.camera.position ).add( vec.multiplyScalar( distance ) );
+
+    this.earth.position.x = pos.x;
+    this.earth.position.y = pos.y;
   }
 }
 

@@ -23,5 +23,5 @@
 ## 👁 Todo
 
 - Textures are taking too long to load with expo on mobile/simulator
-- Long Press to drag earth around
 - Swipe to rotate earth around axis.
+- ~~Long Press to drag earth around

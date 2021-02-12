@@ -9,6 +9,8 @@ import { GLEvent, ResizeEvent } from '../components/GraphicsView';
 
 
 export default class State {
+  private _width: number;
+  private _height: number;
   engine: Engine | null = null;
   renderer: Renderer | null = null;
   private _isdragging: boolean = false;
@@ -23,6 +25,8 @@ export default class State {
     });
 
     this.engine = new Engine(width, height, this.renderer);
+    this._width = width;
+    this._height = height;
     await this.engine.loadAsync();
   };
 
@@ -62,22 +66,34 @@ export default class State {
     // check if the earth was clicked
     if (this.engine.isEarthFocussed(event)) {
       this._isdragging = true;
+
       if (Platform.OS !== 'web')
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+      this.engine.isDragging = true
     }
   }
 
   stopDragging() {
     if (this._isdragging) {
       this._isdragging = false;
+
       if (Platform.OS !== 'web')
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+      this.engine.isDragging = false;
     }
   }
 
-  setCoords(x, y) {
-    if (!this.engine) return;
-    console.log(x, y);
-    this.engine.setCoords(x, y);
+  handlePanResponderMove = (evt, {moveY, moveX}) => {
+    // check if it's dragging.
+    if (this._isdragging) {
+      // if it's dragging update the x by moveX and y by moveY
+      this.engine.dragEarthTo({moveY, moveX});
+    }
+  }
+
+  handlePanResponderEnd = (evt, gestureState) => {
+    console.log('dragging stopped ')
   }
 }

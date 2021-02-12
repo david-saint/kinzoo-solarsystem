@@ -4,7 +4,8 @@ import {
   PanGestureHandler,
   LongPressGestureHandler,
 } from 'react-native-gesture-handler';
-import Animated, { call, useCode } from 'react-native-reanimated';
+import { View, PanResponder } from 'react-native';
+import Animated from 'react-native-reanimated';
 
 import SolarSystem from './SolarSystem/State';
 import GraphicsView from "./components/GraphicsView";
@@ -24,21 +25,15 @@ export default function App() {
     [machine]
   );
 
-  const X = new Animated.Value(0);
-  const Y = new Animated.Value(0);
-
-  React.useEffect(() => {
-    machine?.setCoords(X, Y);
-  }, []);
-
-  const _onPanGestureEvent = Animated.event(
-    [{
-      nativeEvent: {
-        translationX: X,
-        translationY: Y,
-      },
-    }],
-    {useNativeDriver: true},
+  const panResponder = React.useMemo(() => 
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: machine?.handlePanResponderMove,
+      onPanResponderRelease: machine?.handlePanResponderEnd,
+      onPanResponderTerminate: machine?.handlePanResponderEnd,
+    }),
+    [machine]
   );
 
   return (
@@ -47,18 +42,14 @@ export default function App() {
       onHandlerStateChange={machine?.onLongPressBegin}
     >
       <Animated.View style={{flex: 1}}>
-        <PanGestureHandler
-          onGestureEvent={_onPanGestureEvent}
-        >
-          <Animated.View style={{flex: 1}}>
-            <GraphicsView
-              key="solarSystem"
-              onContextCreate={onContextCreate}
-              onRender={machine?.onRender}
-              onResize={machine?.onResize}
-            />
-          </Animated.View>
-        </PanGestureHandler> 
+        <View style={{flex: 1}}  {...panResponder.panHandlers}>
+          <GraphicsView
+            key="solarSystem"
+            onContextCreate={onContextCreate}
+            onRender={machine?.onRender}
+            onResize={machine?.onResize}
+          />
+        </View>
       </Animated.View>
     </LongPressGestureHandler>
   );
