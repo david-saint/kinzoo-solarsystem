@@ -21,7 +21,6 @@ export default class Engine {
   private originalCameraPosition: THREE.Vector3 = new THREE.Vector3();
 
   constructor(width: number, height: number, public renderer: THREE.Renderer) {
-    this._engine = this;
     this._width = width;
     this._height = height;
   }
@@ -125,7 +124,7 @@ class EarthCloudMesh extends THREE.Mesh {
       new THREE.SphereGeometry(CONSTANTS.earthRadius + 5, 32, 32 ),
       new THREE.MeshPhongMaterial({
         transparent: true,
-        // map: new THREE.TextureLoader().load(_assets.clouds.localUri),
+        map: new THREE.TextureLoader().load(_assets.clouds.localUri),
       })
     );
   }
@@ -136,9 +135,9 @@ class StarsMesh extends THREE.Mesh {
     super(
       new THREE.SphereGeometry(4000, 32, 32),
       new THREE.MeshBasicMaterial({
-        // map:  new THREE.TextureLoader().load(_assets.stars.localUri),
-        // side: THREE.BackSide,
-        color: 0x272727
+        map:  new THREE.TextureLoader().load(_assets.stars.localUri),
+        side: THREE.BackSide,
+        // color: 0x272727
       })
     );
   }
