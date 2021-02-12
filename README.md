@@ -18,3 +18,10 @@
 
 - [Expo GL docs](https://docs.expo.io/versions/latest/sdk/gl-view/)
 - [Three.js docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)
+
+
+## 👁 Todo
+
+- Textures are taking too long to load with expo on mobile/simulator
+- Long Press to drag earth around
+- Swipe to rotate earth around axis.
