@@ -31,6 +31,7 @@ export default function App() {
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: machine?.handlePanResponderMove,
       onPanResponderRelease: machine?.handlePanResponderEnd,
+      onPanResponderGrant: machine?.handlePanResponderStart,
       onPanResponderTerminate: machine?.handlePanResponderEnd,
     }),
     [machine]

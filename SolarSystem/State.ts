@@ -24,9 +24,9 @@ export default class State {
       clearColor: CONSTANTS.sceneColor,
     });
 
-    this.engine = new Engine(width, height, this.renderer);
     this._width = width;
     this._height = height;
+    this.engine = new Engine(width, height, this.renderer);
     await this.engine.loadAsync();
   };
 
@@ -85,15 +85,21 @@ export default class State {
     }
   }
 
-  handlePanResponderMove = (evt, {moveY, moveX}) => {
+  handlePanResponderMove = (evt, {moveY, moveX, vx, vy}) => {
     // check if it's dragging.
     if (this._isdragging) {
       // if it's dragging update the x by moveX and y by moveY
       this.engine.dragEarthTo({moveY, moveX});
+      return;
     }
+    this.engine.rotateVelocity = {x: vx, y: vy};
+  }
+
+  handlePanResponderStart = (evt, gestureState) => {
+    this.engine.isDecelerating = false;
   }
 
   handlePanResponderEnd = (evt, gestureState) => {
-    console.log('dragging stopped ')
+    this.engine.isDecelerating = true;
   }
 }

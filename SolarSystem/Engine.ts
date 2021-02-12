@@ -10,13 +10,14 @@ export default class Engine {
   private _width: number;
   private _height: number;
   public isDragging: boolean = false;
+  public isDecelerating: boolean = true;
   private _assets: Record<string, Asset>;
   public camera?: THREE.PerspectiveCamera;
   public earth: THREE.Group = new THREE.Group();
   public tapPoint: THREE.Vector2 = new THREE.Vector2();
   public raycaster: THREE.Raycaster = new THREE.Raycaster();
   private originalCameraPosition: THREE.Vector3 = new THREE.Vector3();
-  private rotateVelocity: {x: number; y: number} = {
+  public rotateVelocity: {x: number; y: number} = {
     x: CONSTANTS.rVelocityX,
     y: CONSTANTS.rVelocityY,
   };
@@ -81,6 +82,14 @@ export default class Engine {
 
     this.earth.rotation.y += this.rotateVelocity.y;
     this.earth.rotation.x += this.rotateVelocity.x;
+
+    if (this.isDecelerating) {
+      // TODO: Implement this better with tweenmax or something
+      const ay = (this.rotateVelocity.y < 0) ? -0.001 : (this.rotateVelocity.y > CONSTANTS.rVelocityY ? 0.001 : 0);
+      const ax = (this.rotateVelocity.x < 0) ? -0.001  : (this.rotateVelocity.x > CONSTANTS.rVelocityX ? 0.001  : 0);
+      this.rotateVelocity.y -= ay;
+      this.rotateVelocity.x -= ax;
+    }
   }
 
   isEarthFocussed({x, y}) {
