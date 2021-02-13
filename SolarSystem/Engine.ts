@@ -103,19 +103,19 @@ export default class Engine {
   }
 
   dragEarthTo({moveX, moveY}) {
-    var vec = new THREE.Vector3(); // create once and reuse
-    var pos = new THREE.Vector3(); // create once and reuse
+    const vec = new THREE.Vector3(); // create once and reuse
+    const pos = new THREE.Vector3(); // create once and reuse
 
     vec.set(
-        ( moveX / window.innerWidth ) * 2 - 1,
-        - ( moveY / window.innerHeight ) * 2 + 1,
+        ( moveX / this._width ) * 2 - 1,
+        - ( moveY / this._height ) * 2 + 1,
         0.5 );
 
     vec.unproject( this.camera );
 
     vec.sub( this.camera.position ).normalize();
 
-    var distance = - this.camera.position.z / vec.z;
+    const distance = - this.camera.position.z / vec.z;
 
     pos.copy( this.camera.position ).add( vec.multiplyScalar( distance ) );
 
