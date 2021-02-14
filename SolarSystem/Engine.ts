@@ -44,7 +44,7 @@ export default class Engine {
     light.position.set(0, 350, 500);
     this.scene.add(new THREE.HemisphereLight(0xffffff, 0x000000, 0.9), light);
 
-    this._assets = await this.loadAssets();
+    this._assets = await (this._width > 600 ? this.loadAssets() : this.loadMobileAssets());
 
     this.build();
   }
@@ -56,6 +56,22 @@ export default class Engine {
       water: Asset.fromModule(require('../images/water_4k.png')),
       earth: Asset.fromModule(require('../images/2_no_clouds_4k.jpg')),
       stars: Asset.fromModule(require('../images/galaxy_starfield.png')),
+    };
+
+    for (const asset of Object.values(assets)) {
+      await asset.downloadAsync();
+    }
+
+    return assets;
+  }
+
+  async loadMobileAssets() {
+    const assets = {
+      clouds: Asset.fromModule(require('../images/fair_clouds_4k-mobile.png')),
+      elev_bump: Asset.fromModule(require('../images/elev_bump_4k-mobile.jpg')),
+      water: Asset.fromModule(require('../images/water_4k-mobile.png')),
+      earth: Asset.fromModule(require('../images/2_no_clouds_4k-mobile.jpg')),
+      stars: Asset.fromModule(require('../images/galaxy_starfield-mobile.png')),
     };
 
     for (const asset of Object.values(assets)) {
@@ -147,6 +163,7 @@ class EarthCloudMesh extends THREE.Mesh {
       new THREE.MeshPhongMaterial({
         transparent: true,
         map: new THREE.TextureLoader().load(_assets.clouds.localUri),
+        // color: 0xff00ff,
       })
     );
   }
