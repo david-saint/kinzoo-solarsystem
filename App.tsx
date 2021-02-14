@@ -2,10 +2,8 @@ import * as React from 'react';
 import {
   State,
   PanGestureHandler,
-  LongPressGestureHandler,
 } from 'react-native-gesture-handler';
 import { View, PanResponder } from 'react-native';
-import Animated from 'react-native-reanimated';
 
 import SolarSystem from './SolarSystem/State';
 import GraphicsView from "./components/GraphicsView";
@@ -38,20 +36,13 @@ export default function App() {
   );
 
   return (
-    <LongPressGestureHandler
-      minDurationMs={500}
-      onHandlerStateChange={machine?.onLongPressBegin}
-    >
-      <Animated.View style={{flex: 1}}>
-        <View style={{flex: 1}}  {...panResponder.panHandlers}>
-          <GraphicsView
-            key="solarSystem"
-            onContextCreate={onContextCreate}
-            onRender={machine?.onRender}
-            onResize={machine?.onResize}
-          />
-        </View>
-      </Animated.View>
-    </LongPressGestureHandler>
+    <View style={{flex: 1}}  {...panResponder.panHandlers}>
+      <GraphicsView
+        key="solarSystem"
+        onContextCreate={onContextCreate}
+        onRender={machine?.onRender}
+        onResize={machine?.onResize}
+      />
+    </View>
   );
 }

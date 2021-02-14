@@ -134,6 +134,7 @@ class EarthMesh extends THREE.Mesh {
         bumpScale: 0.005,
         specularMap: new THREE.TextureLoader().load(_assets.water.localUri),
         specular: new THREE.Color('grey')
+        // color: 0xff00ff
       })
     );
   }
