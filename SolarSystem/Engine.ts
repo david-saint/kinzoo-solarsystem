@@ -1,6 +1,6 @@
-import * as THREE from 'three';
+// import * as THREE from 'three';
 import { Asset } from 'expo-asset';
-import { TextureLoader } from 'expo-three';
+import { THREE, TextureLoader } from 'expo-three';
 import { Platform } from 'react-native';
 
 import Scene from './Scene';
@@ -134,7 +134,7 @@ class EarthMesh extends THREE.Mesh {
         bumpMap: new TextureLoader().load(_assets.elev_bump.localUri),
         bumpScale: 0.005,
         specularMap: new TextureLoader().load(_assets.water.localUri),
-        specular: new THREE.Color('grey')
+        specular: new THREE.Color('grey'),
       })
     );
   }

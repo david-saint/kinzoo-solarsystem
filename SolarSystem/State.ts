@@ -94,7 +94,7 @@ export default class State {
       this.engine.dragEarthTo({moveY, moveX});
       return;
     }
-    this.engine.rotateVelocity = {x: -vx/20, y: vy/20};
+    this.engine.rotateVelocity = {x: -vy/10, y: -vx/10};
   }
 
   handlePanResponderStart = (evt, {x0, y0}) => {
