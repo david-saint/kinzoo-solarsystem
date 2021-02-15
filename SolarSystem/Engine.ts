@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Asset } from 'expo-asset';
+import { TextureLoader } from 'expo-three';
 import { Platform } from 'react-native';
 
 import Scene from './Scene';
@@ -44,7 +45,7 @@ export default class Engine {
     light.position.set(0, 350, 500);
     this.scene.add(new THREE.HemisphereLight(0xffffff, 0x000000, 0.9), light);
 
-    this._assets = await (this._width > 600 ? this.loadAssets() : this.loadMobileAssets());
+    this._assets = await this.loadAssets();
 
     this.build();
   }
@@ -56,22 +57,6 @@ export default class Engine {
       water: Asset.fromModule(require('../images/water_4k.png')),
       earth: Asset.fromModule(require('../images/2_no_clouds_4k.jpg')),
       stars: Asset.fromModule(require('../images/galaxy_starfield.png')),
-    };
-
-    for (const asset of Object.values(assets)) {
-      await asset.downloadAsync();
-    }
-
-    return assets;
-  }
-
-  async loadMobileAssets() {
-    const assets = {
-      clouds: Asset.fromModule(require('../images/fair_clouds_4k-mobile.png')),
-      elev_bump: Asset.fromModule(require('../images/elev_bump_4k-mobile.jpg')),
-      water: Asset.fromModule(require('../images/water_4k-mobile.png')),
-      earth: Asset.fromModule(require('../images/2_no_clouds_4k-mobile.jpg')),
-      stars: Asset.fromModule(require('../images/galaxy_starfield-mobile.png')),
     };
 
     for (const asset of Object.values(assets)) {
@@ -145,10 +130,10 @@ class EarthMesh extends THREE.Mesh {
     super(
       new THREE.SphereGeometry(CONSTANTS.earthRadius, 32, 32 ),
       new THREE.MeshPhongMaterial({
-        map: new THREE.TextureLoader().load(_assets.earth.localUri),
-        bumpMap: new THREE.TextureLoader().load(_assets.elev_bump.localUri),
+        map: new TextureLoader().load(_assets.earth.localUri),
+        bumpMap: new TextureLoader().load(_assets.elev_bump.localUri),
         bumpScale: 0.005,
-        specularMap: new THREE.TextureLoader().load(_assets.water.localUri),
+        specularMap: new TextureLoader().load(_assets.water.localUri),
         specular: new THREE.Color('grey')
         // color: 0xff00ff
       })
@@ -162,7 +147,7 @@ class EarthCloudMesh extends THREE.Mesh {
       new THREE.SphereGeometry(CONSTANTS.earthRadius + 5, 32, 32 ),
       new THREE.MeshPhongMaterial({
         transparent: true,
-        map: new THREE.TextureLoader().load(_assets.clouds.localUri),
+        map: new TextureLoader().load(_assets.clouds.localUri),
         // color: 0xff00ff,
       })
     );
@@ -174,7 +159,7 @@ class StarsMesh extends THREE.Mesh {
     super(
       new THREE.SphereGeometry(4000, 32, 32),
       new THREE.MeshBasicMaterial({
-        map:  new THREE.TextureLoader().load(_assets.stars.localUri),
+        map:  new TextureLoader().load(_assets.stars.localUri),
         side: THREE.BackSide,
         // color: 0x272727
       })
