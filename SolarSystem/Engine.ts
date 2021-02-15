@@ -135,7 +135,6 @@ class EarthMesh extends THREE.Mesh {
         bumpScale: 0.005,
         specularMap: new TextureLoader().load(_assets.water.localUri),
         specular: new THREE.Color('grey')
-        // color: 0xff00ff
       })
     );
   }
@@ -148,7 +147,6 @@ class EarthCloudMesh extends THREE.Mesh {
       new THREE.MeshPhongMaterial({
         transparent: true,
         map: new TextureLoader().load(_assets.clouds.localUri),
-        // color: 0xff00ff,
       })
     );
   }
@@ -161,7 +159,6 @@ class StarsMesh extends THREE.Mesh {
       new THREE.MeshBasicMaterial({
         map:  new TextureLoader().load(_assets.stars.localUri),
         side: THREE.BackSide,
-        // color: 0x272727
       })
     );
   }

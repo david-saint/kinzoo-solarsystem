@@ -22,7 +22,7 @@
 
 ## 👁 Todo
 
-- Textures are taking too long to load with expo on mobile/simulator
 - Implement better decay formula for decelerating after swipe
+- ☑️ Textures are taking too long to load with expo on mobile/simulator
 - ☑️ Swipe to rotate earth around axis.
 - ☑️ Long Press to drag earth around
